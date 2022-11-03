@@ -1,7 +1,7 @@
 const express = require("express");
 const { appendFileSync } = require("fs");
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const indexRoute = require('./routes/index.js');
 
