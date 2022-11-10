@@ -8,23 +8,20 @@ router.use((req, res, next) =>{
     next();
 });
 
-router.get("/", (req, res) =>{
-    const postQuery = firestore.getDocs(firestore.collection(db, "posts"));
-    const postsArray = [];
+router.get("/:id", (req, res) =>{
+    const postId = req.params.id;
+    const postQuery = firestore.getDoc(firestore.doc(db, "posts", postId));
 
     postQuery
         .then((response)=>{
-            response.forEach((post)=>{
-                console.log(post.data());
-                postsArray.push({id:post.id, ...post.data() });
-            });
-                res.send(postsArray);
-            
+            const post = response.data();
+            if(!post) res.send({});
+            res.send(post);    
         })
         .catch((error)=>{
             console.log(error)
             return res.send(error)
-    })
+    });
 });
 
 module.exports = router;
